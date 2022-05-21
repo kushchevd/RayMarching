@@ -1,6 +1,6 @@
 #include "parseTest.h"
 
-int main() {
+void parseTest() {
 	unsigned int SCR_WIDTH = -1;
 	unsigned int SCR_HEIGHT = -1;
 	unsigned int AA = -1;
