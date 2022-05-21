@@ -1,0 +1,21 @@
+#screen width
+SCR_WIDTH = 1920
+
+#screen height
+SCR_HEIGHT = 1080
+
+#fov
+fov = 1.0
+
+#camera speed
+
+speed = 10.0
+
+
+#mouse sensivity
+
+sensivity = 0.1
+
+#Antialiasing x1, x2, x3, x4
+
+AA = 1

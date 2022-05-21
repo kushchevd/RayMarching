@@ -1,25 +1,9 @@
-#define _CRT_SECURE_NO_WARNINGS
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
-#include <shader_s.h>
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
-#include <iostream>
-#include "texture_loader.h"
-#include <camera.h>
-#define STB_IMAGE_IMPLEMENTATION
-#include <stb_image.h>
+#include "../include/main.h"
 
-
-
-void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-void processInput(GLFWwindow* window);
-void mouse_callback(GLFWwindow* window, double xpos, double ypos);
-void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 // settings
-const unsigned int SCR_WIDTH = 1920;
-const unsigned int SCR_HEIGHT = 1080;
+unsigned int SCR_WIDTH = 1920;
+unsigned int SCR_HEIGHT = 1080;
+unsigned int AA = 1;
 
 Camera camera(glm::vec3(19.0f, 36.0f, -19.0f));
 GLfloat lastX = SCR_WIDTH / 2.0;
@@ -42,9 +26,10 @@ int main()
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
 
+    parse_cfg(SCR_WIDTH, SCR_HEIGHT, fov, camera.MovementSpeed, camera.MouseSensitivity, AA);
     // glfw window creation
     // --------------------
-    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "RayMarching", NULL, NULL);
     if (window == NULL)
     {
         std::cout << "Failed to create GLFW window" << std::endl;
@@ -66,13 +51,14 @@ int main()
         return -1;
     }
 
+    include("fragment.glsl");
     // build and compile our shader program
     // ------------------------------------
-    Shader ourShader("vertex.glsl", "fragment.glsl"); // you can name your shader files however you like
+    Shader ourShader("vertex.glsl", "fragment_compiled.glsl"); // you can name your shader files however you like
 
     // set up vertex data (and buffer(s)) and configure vertex attributes
     // ------------------------------------------------------------------
-
+    erase_file("fragment_compiled.glsl");
 
     GLfloat vertices[] = {
          1.0f,  1.0f, 0.0f,  // Top Right
@@ -107,6 +93,7 @@ int main()
     unsigned int texture1 = 1, texture2 = 2, texture3 = 3, texture4 = 4, texture5 = 5, texture6 = 6, texture7 = 7;
     LoadTexture(ourShader, texture1, texture2, texture3, texture4, texture5, texture6, texture7);
 
+    ourShader.setInt("AA", AA);
 
     while (!glfwWindowShouldClose(window))
     {
@@ -147,10 +134,6 @@ int main()
         // render the triangle
         ourShader.use();
         
-      
-
-        glm::mat4 view = camera.GetViewMatrix();
-        ourShader.setMat4("view", view);
         
         ourShader.setMat3("CameraDirection", glm::mat3(camera.Right,camera.Up ,camera.Front));
         ourShader.setFloat("FOV", camera.Zoom);
@@ -196,15 +179,14 @@ int main()
     glfwTerminate();
     return 0;
 }
-
 // process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
 // ---------------------------------------------------------------------------------------------------------
 void processInput(GLFWwindow* window)
 {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
-    
-    
+
+
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
         camera.ProcessKeyboard(FORWARD, deltaTime);
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
