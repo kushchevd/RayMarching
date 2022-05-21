@@ -1,11 +1,11 @@
 #include "../parse.h"
  
 void parse_cfg(unsigned int& SCR_WIDTH, unsigned int& SCR_HEIGHT, GLfloat& fov, float& speed, float& sensivity, unsigned int& AA) {
+    /// check to open the config file
     std::ifstream cFile("config.txt");
-
     if (cFile.is_open()) {
         std::string line;
-
+        /// read line where "#" - comment and detect param name and param value
         while (getline(cFile, line)) {
             line.erase(std::remove_if(line.begin(), line.end(), isspace), line.end());
 
@@ -16,7 +16,7 @@ void parse_cfg(unsigned int& SCR_WIDTH, unsigned int& SCR_HEIGHT, GLfloat& fov, 
                 auto delimiterPos = line.find("=");
                 auto name = line.substr(0, delimiterPos);
                 auto value = line.substr(delimiterPos + 1);
-
+                /// compare param in file with neccessary ones
                 if (name == "SCR_WIDTH")
                     SCR_WIDTH = std::stoi(value);
                 else if (name == "SCR_HEIGHT")

@@ -91,7 +91,6 @@ void include(std::string infile)        //#include
             token[1].erase(remove(token[1].begin(), token[1].end(), '\"'), token[1].end());
             std::ifstream sourceFile(token[1]);
             s.assign((std::istreambuf_iterator<char>(sourceFile)), std::istreambuf_iterator<char>());
-            //std::cout << s << std::endl;
         }
         if (i || 1)
         {
