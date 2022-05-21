@@ -93,8 +93,8 @@ int main()
     glBindVertexArray(0);
 
     /// ident and load textures to our shader
-    unsigned int texture1 = 1, texture2 = 2, texture3 = 3, texture4 = 4, texture5 = 5, texture6 = 6, texture7 = 7;
-    LoadTexture(ourShader, texture1, texture2, texture3, texture4, texture5, texture6, texture7);
+    unsigned int texture1 = 1, texture2 = 2, texture3 = 3, texture4 = 4;
+    LoadTexture(ourShader, texture1, texture2, texture3, texture4);
 
     /// define antialiasing coef in shader
     ourShader.setInt("AA", AA);
@@ -190,13 +190,13 @@ void processInput(GLFWwindow* window)
 
 
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-        camera.ProcessKeyboard(FORWARD, deltaTime);
+        camera.ProcessKeyboard(Camera_Movement::FORWARD, deltaTime);
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-        camera.ProcessKeyboard(BACKWARD, deltaTime);
+        camera.ProcessKeyboard(Camera_Movement::BACKWARD, deltaTime);
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-        camera.ProcessKeyboard(LEFT, deltaTime);
+        camera.ProcessKeyboard(Camera_Movement::LEFT, deltaTime);
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-        camera.ProcessKeyboard(RIGHT, deltaTime);
+        camera.ProcessKeyboard(Camera_Movement::RIGHT, deltaTime);
 }
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
