@@ -1,8 +1,8 @@
-#include "../parse.h"
+#include "parse.h"
  
 void parse_cfg(unsigned int& SCR_WIDTH, unsigned int& SCR_HEIGHT, GLfloat& fov, float& speed, float& sensivity, unsigned int& AA) {
     /// check to open the config file
-    std::ifstream cFile("config.txt");
+    std::ifstream cFile("../config.txt");
     if (cFile.is_open()) {
         std::string line;
         /// read line where "#" - comment and detect param name and param value

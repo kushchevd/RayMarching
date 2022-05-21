@@ -14,6 +14,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 #include "../RayMarching/include/lunclude.h"
+#include "../Unit_tests/UnitTest.h"
 
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
