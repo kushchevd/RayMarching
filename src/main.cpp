@@ -1,12 +1,10 @@
 #include "../include/main.h"
-
-// settings
+/// default settings
 unsigned int SCR_WIDTH = 1920;
 unsigned int SCR_HEIGHT = 1080;
 unsigned int AA = 1;
-
 Camera camera(glm::vec3(19.0f, 36.0f, -19.0f));
-GLfloat lastX = SCR_WIDTH / 2.0;
+GLfloat lastX   = SCR_WIDTH / 2.0;
 GLfloat lastY = SCR_HEIGHT / 2.0;
 GLfloat fov = 1.0f;
 bool firstMouse = true;
@@ -15,8 +13,8 @@ float lastFrame = 0.0f;
 
 int main()
 {
-    // glfw: initialize and configure
-    // ------------------------------
+    /// glfw: initialize and configure
+
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -26,9 +24,10 @@ int main()
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
 
+    /// parse config file to get current parametres
+
     parse_cfg(SCR_WIDTH, SCR_HEIGHT, fov, camera.MovementSpeed, camera.MouseSensitivity, AA);
-    // glfw window creation
-    // --------------------
+    /// glfw window creation
     GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "RayMarching", NULL, NULL);
     if (window == NULL)
     {
@@ -36,6 +35,9 @@ int main()
         glfwTerminate();
         return -1;
     }
+
+    /// callback keyboard, mouse, buffer
+
     glfwMakeContextCurrent(window);
     glfwSetCursorPosCallback(window, mouse_callback);
     glfwSetScrollCallback(window, scroll_callback);
@@ -43,30 +45,31 @@ int main()
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
 
-    // glad: load all OpenGL function pointers
-    // ---------------------------------------
+    /// glad: load all OpenGL function pointers
+
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {
         std::cout << "Failed to initialize GLAD" << std::endl;
         return -1;
     }
 
+    /// parse shader files to include #include option
     include("fragment.glsl");
-    // build and compile our shader program
-    // ------------------------------------
+    /// build and compile our shader program
+
     Shader ourShader("vertex.glsl", "fragment_compiled.glsl"); // you can name your shader files however you like
 
-    // set up vertex data (and buffer(s)) and configure vertex attributes
-    // ------------------------------------------------------------------
+    /// erase shader file with includes
     erase_file("fragment_compiled.glsl");
-
+    /// set up vertex data  and configure vertex attributes
     GLfloat vertices[] = {
          1.0f,  1.0f, 0.0f,  // Top Right
          1.0f, -1.0f, 0.0f, // Bottom Right
         -1.0f, -1.0f, 0.0f,  // Bottom Left
         -1.0f,  1.0f, 0.0f // Top Left 
     };
-    GLuint indices[] = {  // Note that we start from 0!
+    /// coordinates of 2 triangles to draw rectangle
+    GLuint indices[] = {  
         0, 1, 3,  // First Triangle
         1, 2, 3   // Second Triangle
     };
@@ -74,7 +77,7 @@ int main()
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
     glGenBuffers(1, &EBO);
-    // Bind the Vertex Array Object first, then bind and set vertex buffer(s) and attribute pointer(s).
+    /// bind the Vertex Array Object, then bind and set vertex buffers and attribute pointers.
     glBindVertexArray(VAO);
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
@@ -86,29 +89,31 @@ int main()
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
     glEnableVertexAttribArray(0);
 
-    glBindBuffer(GL_ARRAY_BUFFER, 0); // Note that this is allowed, the call to glVertexAttribPointer registered VBO as the currently bound vertex buffer object so afterwards we can safely unbind
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
 
-    glBindVertexArray(0); // Unbind VAO (it's always a good thing to unbind any buffer/array to prevent strange bugs), remember: do NOT unbind the EBO, keep it bound to this VAO
-  
+    /// ident and load textures to our shader
     unsigned int texture1 = 1, texture2 = 2, texture3 = 3, texture4 = 4, texture5 = 5, texture6 = 6, texture7 = 7;
     LoadTexture(ourShader, texture1, texture2, texture3, texture4, texture5, texture6, texture7);
 
+    /// define antialiasing coef in shader
     ourShader.setInt("AA", AA);
 
     while (!glfwWindowShouldClose(window))
     {
+        /// detect time between frames
         float currentFrame = static_cast<float>(glfwGetTime());
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
         // input
-        // -----
+
         processInput(window);
 
-        // render
-        // ------
+        /// window background
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
+        /// bind textures to their id
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, texture1);
 
@@ -131,14 +136,14 @@ int main()
         glBindTexture(GL_TEXTURE_2D, texture7);
 
  
-        // render the triangle
+        /// run shader to bind necessesary files
         ourShader.use();
         
-        
+        /// define camera direction matrix and camera fov in shader
         ourShader.setMat3("CameraDirection", glm::mat3(camera.Right,camera.Up ,camera.Front));
         ourShader.setFloat("FOV", camera.Zoom);
 
-
+        /// define global parameters in shader
 
         GLint fragmentResolutionLocation = glGetUniformLocation(ourShader.ID, "u_resolution");
         glUniform2f(fragmentResolutionLocation, SCR_WIDTH, SCR_HEIGHT);
@@ -161,26 +166,23 @@ int main()
         
         
         glBindVertexArray(VAO);
-        //glDrawArrays(GL_TRIANGLES, 0, 6);
+        /// draw window where scene render
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-        //glBindVertexArray(0);
 
-        // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
-        // -------------------------------------------------------------------------------
+        /// glfw: swap buffers and poll IO events 
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
 
+    ///clear buffers
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
     glDeleteBuffers(1, &EBO);
-    // glfw: terminate, clearing all previously allocated GLFW resources.
-    // ------------------------------------------------------------------
+    /// glfw: terminate, clearing all previously allocated GLFW resources.
     glfwTerminate();
     return 0;
 }
-// process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
-// ---------------------------------------------------------------------------------------------------------
+/// process keyboard inputs
 void processInput(GLFWwindow* window)
 {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
@@ -198,15 +200,12 @@ void processInput(GLFWwindow* window)
 }
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
-// ---------------------------------------------------------------------------------------------
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
-    // make sure the viewport matches the new window dimensions; note that width and 
-    // height will be significantly larger than specified on retina displays.
     glViewport(0, 0, width, height);
 }
 
-
+/// detect mouse position on the screen
 void mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
 {
     float xpos = static_cast<float>(xposIn);
@@ -220,13 +219,14 @@ void mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
     }
 
     float xoffset = xpos - lastX;
-    float yoffset = lastY - ypos; // reversed since y-coordinates go from bottom to top
+    float yoffset = lastY - ypos; 
 
     lastX = xpos;
     lastY = ypos;
 
     camera.ProcessMouseMovement(xoffset, yoffset);
 }
+/// detect mouse scroll
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
     camera.ProcessMouseScroll(static_cast<float>(yoffset));
