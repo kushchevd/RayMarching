@@ -1,0 +1,45 @@
+\hypertarget{shader__s_8h_source}{}\doxysection{shader\+\_\+s.\+h}
+\label{shader__s_8h_source}\index{C:/Users/danie/source/repos/RayMarching/include/shader\_s.h@{C:/Users/danie/source/repos/RayMarching/include/shader\_s.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{preprocessor}{\#pragma once}}
+\DoxyCodeLine{2 \textcolor{preprocessor}{\#ifndef SHADER\_H}}
+\DoxyCodeLine{3 \textcolor{preprocessor}{\#define SHADER\_H}}
+\DoxyCodeLine{4 }
+\DoxyCodeLine{5 \textcolor{preprocessor}{\#define GLM\_FORCE\_RADIANS}}
+\DoxyCodeLine{6 \textcolor{preprocessor}{\#include <glad/glad.h>}}
+\DoxyCodeLine{7 \textcolor{preprocessor}{\#include <glm/glm.hpp>}}
+\DoxyCodeLine{8 }
+\DoxyCodeLine{9 }
+\DoxyCodeLine{10 \textcolor{preprocessor}{\#include <string>}}
+\DoxyCodeLine{11 \textcolor{preprocessor}{\#include <fstream>}}
+\DoxyCodeLine{12 \textcolor{preprocessor}{\#include <sstream>}}
+\DoxyCodeLine{13 \textcolor{preprocessor}{\#include <iostream>}}
+\DoxyCodeLine{14 }
+\DoxyCodeLine{15 \textcolor{keyword}{class }\mbox{\hyperlink{class_shader}{Shader}}}
+\DoxyCodeLine{16 \{}
+\DoxyCodeLine{17 \textcolor{keyword}{public}:}
+\DoxyCodeLine{18     \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} ID;}
+\DoxyCodeLine{19 }
+\DoxyCodeLine{20     \mbox{\hyperlink{class_shader}{Shader}}(\textcolor{keyword}{const} \textcolor{keywordtype}{char}* vertexPath, \textcolor{keyword}{const} \textcolor{keywordtype}{char}* fragmentPath);}
+\DoxyCodeLine{21 }
+\DoxyCodeLine{22     \textcolor{keywordtype}{void} use();}
+\DoxyCodeLine{23     \textcolor{keywordtype}{void} setBool(\textcolor{keyword}{const} std::string\& name, \textcolor{keywordtype}{bool} value) \textcolor{keyword}{const};}
+\DoxyCodeLine{24     \textcolor{keywordtype}{void} setInt(\textcolor{keyword}{const} std::string\& name, \textcolor{keywordtype}{int} value) \textcolor{keyword}{const};}
+\DoxyCodeLine{25     \textcolor{keywordtype}{void} setFloat(\textcolor{keyword}{const} std::string\& name, \textcolor{keywordtype}{float} value) \textcolor{keyword}{const};}
+\DoxyCodeLine{26     \textcolor{keywordtype}{void} setVec2(\textcolor{keyword}{const} std::string\& name, \textcolor{keyword}{const} glm::vec2\& value) \textcolor{keyword}{const};}
+\DoxyCodeLine{27     \textcolor{keywordtype}{void} setVec2(\textcolor{keyword}{const} std::string\& name, \textcolor{keywordtype}{float} x, \textcolor{keywordtype}{float} y) \textcolor{keyword}{const};}
+\DoxyCodeLine{28     \textcolor{keywordtype}{void} setVec3(\textcolor{keyword}{const} std::string\& name, \textcolor{keyword}{const} glm::vec3\& value) \textcolor{keyword}{const};}
+\DoxyCodeLine{29     \textcolor{keywordtype}{void} setVec3(\textcolor{keyword}{const} std::string\& name, \textcolor{keywordtype}{float} x, \textcolor{keywordtype}{float} y, \textcolor{keywordtype}{float} z) \textcolor{keyword}{const};}
+\DoxyCodeLine{30     \textcolor{keywordtype}{void} setVec4(\textcolor{keyword}{const} std::string\& name, \textcolor{keyword}{const} glm::vec4\& value) \textcolor{keyword}{const};}
+\DoxyCodeLine{31     \textcolor{keywordtype}{void} setVec4(\textcolor{keyword}{const} std::string\& name, \textcolor{keywordtype}{float} x, \textcolor{keywordtype}{float} y, \textcolor{keywordtype}{float} z, \textcolor{keywordtype}{float} w);}
+\DoxyCodeLine{32     \textcolor{keywordtype}{void} setMat2(\textcolor{keyword}{const} std::string\& name, \textcolor{keyword}{const} glm::mat2\& mat) \textcolor{keyword}{const};}
+\DoxyCodeLine{33     \textcolor{keywordtype}{void} setMat3(\textcolor{keyword}{const} std::string\& name, \textcolor{keyword}{const} glm::mat3\& mat) \textcolor{keyword}{const};}
+\DoxyCodeLine{34     \textcolor{keywordtype}{void} setMat4(\textcolor{keyword}{const} std::string\& name, \textcolor{keyword}{const} glm::mat4\& mat) \textcolor{keyword}{const};}
+\DoxyCodeLine{35 }
+\DoxyCodeLine{36 \textcolor{keyword}{private}:}
+\DoxyCodeLine{37     \textcolor{keywordtype}{void} checkCompileErrors(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} shader, std::string type);}
+\DoxyCodeLine{38 \};}
+\DoxyCodeLine{39 \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}
