@@ -1,5 +1,5 @@
 CC=c++
-CFLAGS=-c -std=c++11
+CFLAGS=-c -std=c++11 -lglfw3
 LDFLAGS = -std=c++11
 
 SOURCES=main.cpp include/texture_loader.cpp include/parse.cpp include/parse.cpp include/glm/detail/dummy.cpp include/glm/detail/glm.cpp 
