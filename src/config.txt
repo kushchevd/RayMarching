@@ -9,7 +9,7 @@ fov = 1.0
 
 #camera speed
 
-speed = 10.0
+speed = 30.0
 
 
 #mouse sensivity
