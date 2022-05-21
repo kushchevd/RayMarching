@@ -125,6 +125,8 @@ int main()
 
         glActiveTexture(GL_TEXTURE3);
         glBindTexture(GL_TEXTURE_2D, texture4);
+
+
  
         /// run shader to bind necessesary files
         ourShader.use();
