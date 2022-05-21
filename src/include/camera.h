@@ -1,6 +1,8 @@
+#pragma once
 #ifndef CAMERA_H
 #define CAMERA_H
 
+#define GLM_FORCE_RADIANS
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -60,11 +62,6 @@ public:
         updateCameraVectors();
     }
 
-    // returns the view matrix calculated using Euler Angles and the LookAt Matrix
-    glm::mat4 GetViewMatrix()
-    {
-        return glm::lookAt(Position, Position + Front, Up);
-    }
 
     // processes input received from any keyboard-like input system. Accepts input parameter in the form of camera defined ENUM (to abstract it from windowing systems)
     void ProcessKeyboard(Camera_Movement direction, float deltaTime)
